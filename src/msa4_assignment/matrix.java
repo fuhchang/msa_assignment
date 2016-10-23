@@ -3,10 +3,14 @@ package msa4_assignment;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.io.FileWriter;
+//import au.com.bytecode.opencsv.CSVWriter;
 
 public class matrix {
 
@@ -18,7 +22,8 @@ public class matrix {
 		String line ="";
 		Set<String> set = new LinkedHashSet<String>();
 		HashMap<String, HashMap<String, Integer>> basemap = new HashMap<String,HashMap<String, Integer>>();
-		
+		ArrayList<Integer> keyList = new ArrayList<Integer>();
+		ArrayList<String> valueList = new ArrayList<String>();
 			try {
 				buff = new BufferedReader(new FileReader(csv));
 				while((line = buff.readLine()) != null){
@@ -51,7 +56,9 @@ public class matrix {
 				while((line = buff.readLine()) != null){
 					String [] item = line.split(",");
 					int id = Integer.parseInt(item[0]);
-					
+					keyList.add(id);
+					valueList.add(item[1]);
+					/*
 					if(buff.readLine() != null){
 						String next = buff.readLine();
 						String [] nextItem = next.split(",");
@@ -61,6 +68,7 @@ public class matrix {
 							basemap.get(nextItem[1]).put(item[1], basemap.get(nextItem[1]).get(item[1]).intValue() + 1);
 						}
 					}
+					*/
 				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -69,10 +77,26 @@ public class matrix {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			for(int i=0; i<keyList.size()/2; i++){
+				for(int j=i+1; j<keyList.size(); j++){
+					//System.out.println("i:"+valueList.get(i) + " j:"+ valueList.get(j));
+					if(keyList.get(i) == keyList.get(j)){
+						basemap.get(valueList.get(i)).put(valueList.get(j), basemap.get(valueList.get(i)).get(valueList.get(j)).intValue()+ 1);
+						basemap.get(valueList.get(j)).put(valueList.get(i), basemap.get(valueList.get(j)).get(valueList.get(i)).intValue() + 1);
+					}
+				}
+			}
 		for(String name : basemap.keySet()){
 			String key = name.toString();
-			//System.out.println(key + " " + basemap.get(name));
+			System.out.println(key + " " + basemap.get(name).toString());
 		}	
+		/*
+		CSVWriter writer = new CSVWriter(new FileWriter("yourfile.csv"), '\t');
+	     // feed in your array (or convert your data to an array)
+	     String[] entries = "first#second#third".split("#");
+	     writer.writeNext(entries);
+		 writer.close();
+		 */
 	}
 
 }
