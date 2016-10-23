@@ -13,6 +13,7 @@ public class matrix {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String csv = "D:/Downloads/music/csv/tags.csv";
+		String phototags ="D:/Downloads/music/csv/photos_tags.csv";
 		BufferedReader buff = null;
 		String line ="";
 		Set<String> set = new LinkedHashSet<String>();
@@ -45,17 +46,33 @@ public class matrix {
 					}
 				}
 			}
-		
-				
-			
-		
-		
+			try {
+				buff = new BufferedReader(new FileReader(phototags));
+				while((line = buff.readLine()) != null){
+					String [] item = line.split(",");
+					int id = Integer.parseInt(item[0]);
+					
+					if(buff.readLine() != null){
+						String next = buff.readLine();
+						String [] nextItem = next.split(",");
+						int nextid = Integer.parseInt(nextItem[0]);
+						if(id == nextid){
+							basemap.get(item[1]).put(nextItem[1], basemap.get(item[1]).get(nextItem[1]).intValue() + 1);
+							basemap.get(nextItem[1]).put(item[1], basemap.get(nextItem[1]).get(item[1]).intValue() + 1);
+						}
+					}
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		for(String name : basemap.keySet()){
 			String key = name.toString();
-			System.out.println(key + " " + basemap.get(name));
-		}
-		
-		
+			//System.out.println(key + " " + basemap.get(name));
+		}	
 	}
 
 }
