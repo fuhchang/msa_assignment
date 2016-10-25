@@ -7,8 +7,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 
@@ -16,6 +19,10 @@ public class matrix {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		/*
+		 * 
+		 * Part 1 matrix
+		 */
 		String csv = "D:/Downloads/music/csv/tags.csv";
 		String phototags ="D:/Downloads/music/csv/photos_tags.csv";
 		//String csv = "/Volumes/FC/SIT-UOG/semester 1 - yr 2/coursework-image-collection/csv/tags.csv";
@@ -107,6 +114,43 @@ public class matrix {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}		
+			
+			/*
+			 * 
+			 * part 2
+			 */
+			
+	
+			
+			
+			Map<String, Integer> watermap = sortByValue(basemap.get("water"));
+			Map<String, Integer> peoplemap = sortByValue(basemap.get("people"));
+			Map<String, Integer> londonmap = sortByValue(basemap.get("london"));
+			System.out.println(watermap.values());
+			System.out.println(watermap.get(watermap.values()));
 	}
 	
+	public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+	    return map.entrySet()
+	              .stream()
+	              .sorted(Map.Entry.comparingByValue(/*Collections.reverseOrder()*/))
+	              .collect(Collectors.toMap(
+	                Map.Entry::getKey, 
+	                Map.Entry::getValue, 
+	                (e1, e2) -> e1, 
+	                LinkedHashMap::new
+	              ));
+	}
+	
+	public Set getLastFiveItem(Map<String, Integer> map){
+		int current =0;
+		int i=0;
+		Set<String> topfive = null;
+		for(String key : map.keySet()){
+			if(map.get(key) > current){
+				current = map.get(key);
+			}
+		}
+		return null;
+	}
 }
