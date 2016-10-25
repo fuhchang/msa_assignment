@@ -3,6 +3,7 @@ package msa4_assignment;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,10 +16,10 @@ public class matrix {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		//String csv = "D:/Downloads/music/csv/tags.csv";
-		//String phototags ="D:/Downloads/music/csv/photos_tags.csv";
-		String csv = "/Volumes/FC/SIT-UOG/semester 1 - yr 2/coursework-image-collection/csv/tags.csv";
-		String phototags = "/Volumes/FC/SIT-UOG/semester 1 - yr 2/coursework-image-collection/csv/photos_tags.csv";
+		String csv = "D:/Downloads/music/csv/tags.csv";
+		String phototags ="D:/Downloads/music/csv/photos_tags.csv";
+		//String csv = "/Volumes/FC/SIT-UOG/semester 1 - yr 2/coursework-image-collection/csv/tags.csv";
+		//String phototags = "/Volumes/FC/SIT-UOG/semester 1 - yr 2/coursework-image-collection/csv/photos_tags.csv";
 		BufferedReader buff = null;
 		String line ="";
 		Set<String> set = new LinkedHashSet<String>();
@@ -57,20 +58,8 @@ public class matrix {
 				buff = new BufferedReader(new FileReader(phototags));
 				while((line = buff.readLine()) != null){
 					String [] item = line.split(",");
-					int id = Integer.parseInt(item[0]);
-					keyList.add(id);
+					keyList.add(Integer.parseInt(item[0]));
 					valueList.add(item[1]);
-					/*
-					if(buff.readLine() != null){
-						String next = buff.readLine();
-						String [] nextItem = next.split(",");
-						int nextid = Integer.parseInt(nextItem[0]);
-						if(id == nextid){
-							basemap.get(item[1]).put(nextItem[1], basemap.get(item[1]).get(nextItem[1]).intValue() + 1);
-							basemap.get(nextItem[1]).put(item[1], basemap.get(nextItem[1]).get(item[1]).intValue() + 1);
-						}
-					}
-					*/
 				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -80,21 +69,44 @@ public class matrix {
 				e.printStackTrace();
 			}
 			for(int i=0; i<keyList.size(); i++){
-				for(int j=i+1; j<keyList.size(); j++){
-					//System.out.println("i:"+valueList.get(i) + " j:"+ valueList.get(j));
-					if(keyList.get(i) == keyList.get(j)){
-						basemap.get(valueList.get(i)).put(valueList.get(j), basemap.get(valueList.get(i)).get(valueList.get(j)).intValue()+ 1);
-						basemap.get(valueList.get(j)).put(valueList.get(i), basemap.get(valueList.get(j)).get(valueList.get(i)).intValue()+ 1);
+				
+				int j=i+1;
+				while(j<keyList.size()){
+					if(keyList.get(i).toString().equals(keyList.get(j).toString())){
+						basemap.get(valueList.get(i)).put(valueList.get(j), basemap.get(valueList.get(i)).get(valueList.get(j))+1);
+						basemap.get(valueList.get(j)).put(valueList.get(i), basemap.get(valueList.get(j)).get(valueList.get(i))+1);
+						j++;
+					}else{
+						break;
 					}
 				}
 			}
-			/*
-		for(String name : basemap.keySet()){
-			String key = name.toString();
-			System.out.println(key + " " + basemap.get(name).toString());
-		}
-		*/	
-		
+			
+			try {
+				String header = " ,";
+				for(String key : basemap.keySet()){
+					header += key + ",";
+				}
+				header.substring(0, header.length()-1);
+				FileWriter write = new FileWriter("D:/Downloads/music/csv/coocurrencePhotoTags.csv");
+				
+				write.append(header);
+				
+				for(String key : basemap.keySet()){
+					write.append("\n");
+					write.append(key);
+					write.append(",");
+					for(String tag : basemap.get(key).keySet()){
+						write.append(""+basemap.get(key).get(tag));
+						write.append(",");
+					}
+					
+				}
+				write.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
 	}
 	
 }
