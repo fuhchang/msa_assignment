@@ -16,8 +16,10 @@ public class matrix {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String csv = "D:/Downloads/music/csv/tags.csv";
-		String phototags ="D:/Downloads/music/csv/photos_tags.csv";
+		//String csv = "D:/Downloads/music/csv/tags.csv";
+		//String phototags ="D:/Downloads/music/csv/photos_tags.csv";
+		String csv = "/Volumes/FC/SIT-UOG/semester 1 - yr 2/coursework-image-collection/csv/tags.csv";
+		String phototags = "/Volumes/FC/SIT-UOG/semester 1 - yr 2/coursework-image-collection/csv/photos_tags.csv";
 		BufferedReader buff = null;
 		String line ="";
 		Set<String> set = new LinkedHashSet<String>();
@@ -37,6 +39,7 @@ public class matrix {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}finally{
+				
 				for(String s : set){
 					basemap.put(s, new HashMap<String, Integer>());
 				}
@@ -77,26 +80,22 @@ public class matrix {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			for(int i=0; i<keyList.size()/2; i++){
+			for(int i=0; i<keyList.size(); i++){
 				for(int j=i+1; j<keyList.size(); j++){
 					//System.out.println("i:"+valueList.get(i) + " j:"+ valueList.get(j));
 					if(keyList.get(i) == keyList.get(j)){
 						basemap.get(valueList.get(i)).put(valueList.get(j), basemap.get(valueList.get(i)).get(valueList.get(j)).intValue()+ 1);
-						basemap.get(valueList.get(j)).put(valueList.get(i), basemap.get(valueList.get(j)).get(valueList.get(i)).intValue() + 1);
+						basemap.get(valueList.get(j)).put(valueList.get(i), basemap.get(valueList.get(j)).get(valueList.get(i)).intValue()+ 1);
 					}
 				}
 			}
+			/*
 		for(String name : basemap.keySet()){
 			String key = name.toString();
 			System.out.println(key + " " + basemap.get(name).toString());
-		}	
-		/*
-		CSVWriter writer = new CSVWriter(new FileWriter("yourfile.csv"), '\t');
-	     // feed in your array (or convert your data to an array)
-	     String[] entries = "first#second#third".split("#");
-	     writer.writeNext(entries);
-		 writer.close();
-		 */
+		}
+		*/	
+		
 	}
-
+	
 }
