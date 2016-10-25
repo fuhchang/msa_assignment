@@ -3,14 +3,13 @@ package msa4_assignment;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.io.FileWriter;
-//import au.com.bytecode.opencsv.CSVWriter;
+
+
 
 public class matrix {
 
