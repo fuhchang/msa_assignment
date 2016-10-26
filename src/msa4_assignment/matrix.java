@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
@@ -126,15 +127,17 @@ public class matrix {
 			Map<String, Integer> watermap = sortByValue(basemap.get("water"));
 			Map<String, Integer> peoplemap = sortByValue(basemap.get("people"));
 			Map<String, Integer> londonmap = sortByValue(basemap.get("london"));
+		
+			System.out.println("WATER: " + getMostFiveItem(watermap));
+			System.out.println("People: " + getMostFiveItem(peoplemap));
+			System.out.println("London: " +getMostFiveItem(londonmap));
 
-			System.out.println(getMostFiveItem(watermap));
-			System.out.println(getMostFiveItem(peoplemap));
-			System.out.println(getMostFiveItem(londonmap));
-			int size=0;
+			Set<String> uniquePhoto = new HashSet<String>();
 			try {
-				buff = new BufferedReader(new FileReader(photos));
+				buff = new BufferedReader(new FileReader(phototags));
 				while((line = buff.readLine()) != null){
-					size++;
+					String [] item = line.split(",");
+					uniquePhoto.add(item[0]);
 					}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -143,12 +146,12 @@ public class matrix {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}finally{
-				Map<String, Integer> waterIdfMap = sortByValue(ComputeAllIDF(basemap.get("water"),size));
-				Map<String, Integer> peopleIdfMap = sortByValue(ComputeAllIDF(basemap.get("people"),size));
-				Map<String, Integer> londonIdfMap = sortByValue(ComputeAllIDF(basemap.get("london"),size));
-				System.out.println(getMostFiveItem(waterIdfMap));
-				System.out.println(getMostFiveItem(peopleIdfMap));
-				System.out.println(getMostFiveItem(londonIdfMap));
+				Map<String, Integer> waterIdfMap = sortByValue(Compute(basemap.get("water"),uniquePhoto.size(), "water",phototags));
+				Map<String, Integer> peopleIdfMap = sortByValue(Compute(basemap.get("people"),uniquePhoto.size(),"people",phototags));
+				Map<String, Integer> londonIdfMap = sortByValue(Compute(basemap.get("london"),uniquePhoto.size(),"london",phototags));
+				System.out.println("WATER: " +getMostFiveItem(waterIdfMap));
+				System.out.println("People: " +getMostFiveItem(peopleIdfMap));
+				System.out.println("London: " +getMostFiveItem(londonIdfMap));
 			}
 			
 	}
@@ -165,16 +168,13 @@ public class matrix {
 	              ));
 	}
 	 
-
-
-
-	
-	public static ArrayList<String> getMostFiveItem(Map<String, Integer> map){
+	public static Map<String, Integer> getMostFiveItem(Map<String, Integer> map){
 		int i = 0;
-		ArrayList<String> list = new ArrayList<String>();
+		Map<String, Integer> list = new HashMap<String, Integer>();
 		for(String s : map.keySet()){
+			System.out.println(s);
 			if(i < 5){
-				list.add(s);
+				list.put(s, map.get(s));
 				i++;
 			}else{
 				break;
@@ -183,17 +183,74 @@ public class matrix {
 		return list;
 	}
 	
-	public static Map<String, Integer> ComputeAllIDF(Map<String, Integer> map, int photsSize){
+	public static Map<String, Integer> Compute(Map<String, Integer> map, int photsSize, String name, String csv){
 		Map<String, Integer> resultmap = new HashMap<String, Integer>();
 		for(String key : map.keySet()){
 			if(map.get(key) > 0){
-				resultmap.put(key, idfCalculator(photsSize, map.get(key)));
+				resultmap.put(key, ((photsSize/NT(csv,key)))*map.get(key));
 			}
 		}
+		
 		return resultmap;	
 	}
 	
-	public static Integer idfCalculator(int total_photo_size,int no_of_tag){
-		return (int) Math.log10(total_photo_size/(total_photo_size * no_of_tag));	
+	public static Integer NT(String phototags, String key){
+		Set<String> uniquePhoto = new HashSet<String>();
+		
+		BufferedReader buff ;
+		String line;
+		try {
+			buff = new BufferedReader(new FileReader(phototags));
+			while((line = buff.readLine()) != null){
+				String [] item = line.split(",");
+				if(item[1].equals(key)){
+					uniquePhoto.add(item[0]);
+				}
+				}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return  uniquePhoto.size();
+	}
+	public static Integer computeIDF(String key, HashMap<String, HashMap<String, Integer>> map){
+		int count =0;
+		for(String item : map.keySet()){
+			for(String innerItem: map.get(item).keySet()){
+				if(innerItem.equals(key)){
+					count++;
+				}else if(item.equals(key) && !innerItem.equals(key)){
+					count++;
+				}
+			}
+		}
+		
+		return count;
+	}
+
+	
+	public static Integer CountApprear(String key, String photos_tags){
+		int count =0;
+		BufferedReader buff;
+		String line;
+		try {
+			buff = new BufferedReader(new FileReader(photos_tags));
+			while((line = buff.readLine()) != null){
+				String [] tags = line.split(",");
+				if(tags[1].equals(key)){
+						count++;
+					}
+				}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return count;
 	}
 }
