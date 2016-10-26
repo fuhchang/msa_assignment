@@ -27,12 +27,10 @@ public class matrix {
 		 * 
 		 * Part 1 matrix
 		 */
-		//String csv = "D:/Downloads/music/csv/tags.csv";
-		//String phototags ="D:/Downloads/music/csv/photos_tags.csv";
-		//String Coocurrence  = "D:/Downloads/music/csv/coocurrencePhotoTags.csv"
-		String csv = "/Users/fuhchangloi/git/msa_assignment/tags.csv";
-		String phototags ="/Users/fuhchangloi/git/msa_assignment/photos_tags.csv";
-		String Coocurrence ="/Users/fuhchangloi/git/msa_assignment/coocurrencePhotoTags.csv";
+		String csv = "tags.csv";
+		String phototags ="photos_tags.csv";
+		String photos = "photos.csv";
+		String Coocurrence ="coocurrencePhotoTags.csv";
 		BufferedReader buff = null;
 		String line ="";
 		Set<String> set = new LinkedHashSet<String>();
@@ -128,16 +126,31 @@ public class matrix {
 			Map<String, Integer> watermap = sortByValue(basemap.get("water"));
 			Map<String, Integer> peoplemap = sortByValue(basemap.get("people"));
 			Map<String, Integer> londonmap = sortByValue(basemap.get("london"));
-			ArrayList<String> waterList = new ArrayList<String>();
-			ArrayList<String> peopleList = new ArrayList<String>();
-			ArrayList<String> londonList = new ArrayList<String>();
-			waterList.addAll(getLastFiveItem(watermap));
-			peopleList.addAll(getLastFiveItem(peoplemap));
-			londonList.addAll(getLastFiveItem(londonmap));
-			System.out.println(waterList);
-			System.out.println(peopleList);
-			System.out.println(londonList);
-			int IDF;
+
+			System.out.println(getMostFiveItem(watermap));
+			System.out.println(getMostFiveItem(peoplemap));
+			System.out.println(getMostFiveItem(londonmap));
+			int size=0;
+			try {
+				buff = new BufferedReader(new FileReader(photos));
+				while((line = buff.readLine()) != null){
+					size++;
+					}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally{
+				Map<String, Integer> waterIdfMap = sortByValue(ComputeAllIDF(basemap.get("water"),size));
+				Map<String, Integer> peopleIdfMap = sortByValue(ComputeAllIDF(basemap.get("people"),size));
+				Map<String, Integer> londonIdfMap = sortByValue(ComputeAllIDF(basemap.get("london"),size));
+				System.out.println(getMostFiveItem(waterIdfMap));
+				System.out.println(getMostFiveItem(peopleIdfMap));
+				System.out.println(getMostFiveItem(londonIdfMap));
+			}
+			
 	}
 	
 	public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
@@ -156,7 +169,7 @@ public class matrix {
 
 
 	
-	public static ArrayList<String> getLastFiveItem(Map<String, Integer> map){
+	public static ArrayList<String> getMostFiveItem(Map<String, Integer> map){
 		int i = 0;
 		ArrayList<String> list = new ArrayList<String>();
 		for(String s : map.keySet()){
@@ -170,4 +183,17 @@ public class matrix {
 		return list;
 	}
 	
+	public static Map<String, Integer> ComputeAllIDF(Map<String, Integer> map, int photsSize){
+		Map<String, Integer> resultmap = new HashMap<String, Integer>();
+		for(String key : map.keySet()){
+			if(map.get(key) > 0){
+				resultmap.put(key, idfCalculator(photsSize, map.get(key)));
+			}
+		}
+		return resultmap;	
+	}
+	
+	public static Integer idfCalculator(int total_photo_size,int no_of_tag){
+		return (int) Math.log10(total_photo_size/(total_photo_size * no_of_tag));	
+	}
 }
