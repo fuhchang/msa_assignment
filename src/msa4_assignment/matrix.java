@@ -6,10 +6,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+
 import java.util.Map;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -129,13 +133,13 @@ public class matrix {
 			Map<String, Integer> peoplemap = sortByValue(basemap.get("people"));
 			Map<String, Integer> londonmap = sortByValue(basemap.get("london"));
 			System.out.println(watermap.values());
-			System.out.println(watermap.get(watermap.values()));
+		
 	}
 	
 	public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
 	    return map.entrySet()
 	              .stream()
-	              .sorted(Map.Entry.comparingByValue(/*Collections.reverseOrder()*/))
+	              .sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
 	              .collect(Collectors.toMap(
 	                Map.Entry::getKey, 
 	                Map.Entry::getValue, 
@@ -143,6 +147,10 @@ public class matrix {
 	                LinkedHashMap::new
 	              ));
 	}
+	 
+
+
+
 	
 	public Set getLastFiveItem(Map<String, Integer> map){
 		int current =0;
