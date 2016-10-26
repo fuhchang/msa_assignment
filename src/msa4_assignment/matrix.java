@@ -23,10 +23,12 @@ public class matrix {
 		 * 
 		 * Part 1 matrix
 		 */
-		String csv = "D:/Downloads/music/csv/tags.csv";
-		String phototags ="D:/Downloads/music/csv/photos_tags.csv";
-		//String csv = "/Volumes/FC/SIT-UOG/semester 1 - yr 2/coursework-image-collection/csv/tags.csv";
-		//String phototags = "/Volumes/FC/SIT-UOG/semester 1 - yr 2/coursework-image-collection/csv/photos_tags.csv";
+		//String csv = "D:/Downloads/music/csv/tags.csv";
+		//String phototags ="D:/Downloads/music/csv/photos_tags.csv";
+		//String Coocurrence  = "D:/Downloads/music/csv/coocurrencePhotoTags.csv"
+		String csv = "/Users/fuhchangloi/git/msa_assignment/tags.csv";
+		String phototags ="/Users/fuhchangloi/git/msa_assignment/photos_tags.csv";
+		String Coocurrence ="/Users/fuhchangloi/git/msa_assignment/coocurrencePhotoTags.csv";
 		BufferedReader buff = null;
 		String line ="";
 		Set<String> set = new LinkedHashSet<String>();
@@ -95,7 +97,7 @@ public class matrix {
 					header += key + ",";
 				}
 				header.substring(0, header.length()-1);
-				FileWriter write = new FileWriter("D:/Downloads/music/csv/coocurrencePhotoTags.csv");
+				FileWriter write = new FileWriter(Coocurrence);
 				
 				write.append(header);
 				
@@ -153,4 +155,5 @@ public class matrix {
 		}
 		return null;
 	}
+	
 }
