@@ -125,14 +125,18 @@ public class matrix {
 			 * 
 			 * part 2
 			 */
-			
-	
-			
-			
 			Map<String, Integer> watermap = sortByValue(basemap.get("water"));
 			Map<String, Integer> peoplemap = sortByValue(basemap.get("people"));
 			Map<String, Integer> londonmap = sortByValue(basemap.get("london"));
-			System.out.println(watermap.values());
+			ArrayList<String> waterList = new ArrayList<String>();
+			ArrayList<String> peopleList = new ArrayList<String>();
+			ArrayList<String> londonList = new ArrayList<String>();
+			waterList.addAll(getLastFiveItem(watermap));
+			peopleList.addAll(getLastFiveItem(peoplemap));
+			londonList.addAll(getLastFiveItem(londonmap));
+			System.out.println(waterList);
+			System.out.println(peopleList);
+			System.out.println(londonList);
 		
 	}
 	
@@ -152,16 +156,18 @@ public class matrix {
 
 
 	
-	public Set getLastFiveItem(Map<String, Integer> map){
-		int current =0;
-		int i=0;
-		Set<String> topfive = null;
-		for(String key : map.keySet()){
-			if(map.get(key) > current){
-				current = map.get(key);
+	public static ArrayList<String> getLastFiveItem(Map<String, Integer> map){
+		int i = 0;
+		ArrayList<String> list = new ArrayList<String>();
+		for(String s : map.keySet()){
+			if(i < 5){
+				list.add(s);
+				i++;
+			}else{
+				break;
 			}
 		}
-		return null;
+		return list;
 	}
 	
 }
