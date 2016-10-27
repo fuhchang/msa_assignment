@@ -76,7 +76,6 @@ public class matrix {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 			for(int i=0; i<keyList.size(); i++){
 				int j=i+1;
 				while(j<keyList.size()){
@@ -109,6 +108,7 @@ public class matrix {
 					}
 					
 				}
+				
 				write.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
