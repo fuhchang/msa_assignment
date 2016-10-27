@@ -76,6 +76,7 @@ public class matrix {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			for(int i=0; i<keyList.size(); i++){
 				int j=i+1;
 				while(j<keyList.size()){
@@ -88,7 +89,6 @@ public class matrix {
 					}
 				}
 			}
-			System.out.println(basemap.get("explore").get("macro"));
 			try {
 				String header = " ,";
 				for(String key : basemap.keySet()){
