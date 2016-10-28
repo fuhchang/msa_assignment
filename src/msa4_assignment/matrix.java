@@ -154,6 +154,10 @@ public class matrix {
 				System.out.println("Water: " +getMostFiveItem(waterIdfMap));
 				System.out.println("People: " +getMostFiveItem(peopleIdfMap));
 				System.out.println("London: " +getMostFiveItem(londonIdfMap));
+				
+				System.out.println(Math.log10(uniquePhoto.size()/NT(csv,"water")));
+				System.out.println(uniquePhoto.size());
+				System.out.println(NT(csv,"water"));
 			}
 			
 	}
@@ -186,7 +190,7 @@ public class matrix {
 	 * count the number of photo with tags
 	 */
 	@SuppressWarnings("resource")
-	public static Integer NT(String tags, String key){
+	public static Double NT(String tags, String key){
 		
 		
 		BufferedReader buff ;
@@ -196,7 +200,7 @@ public class matrix {
 			while((line = buff.readLine()) != null){
 				String [] item = line.split(",");
 				if(item[0].equals(key)){
-					return Integer.parseInt(item[1]);
+					return Double.parseDouble(item[1]);
 				}
 				}
 		} catch (FileNotFoundException e) {
@@ -206,7 +210,7 @@ public class matrix {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return 0;
+		return 0.0;
 	}
 
 	/*
